@@ -1,1 +1,1 @@
-web: gunicorn gudang.wsgi
+web: gunicorn gudang.wsgi --log-file -
