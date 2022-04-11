@@ -30,14 +30,18 @@
             <div class="card-header pt-3 bg-white border-bottom">
                 <form action="{% url 'viewBarangKeluar' %}" method="get">
                     <div class="row">
-                        <div class="col-auto  mb-1 d-flex align-items-center">
-                            Dari <input type="date" name="start" class="form-control ml-2" value="{{ start|date:'Y-m-d' }}">
+                        <div class="col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-6 d-flex align-items-center">
+                                    Dari <input type="date" name="start" class="form-control ml-2" value="{{ start|date:'Y-m-d' }}">
+                                </div>
+                                <div class="form-group col-md-6 d-flex align-items-center">
+                                    Sampai <input type="date" name="end" class="form-control ml-2" value="{{ end|date:'Y-m-d' }}">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-auto mb-1 d-flex align-items-center">
-                            Sampai <input type="date" name="end" class="form-control ml-2" value="{{ end|date:'Y-m-d' }}">
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary"><i class="mr-1 uil-search"></i> Terapkan</button>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary btn-block"><i class="mr-1 uil-search"></i> Terapkan</button>
                         </div>
                     </div>
                 </form>
@@ -98,15 +102,15 @@
                                                 <label>Pengambil Barang</label>
                                                 <input type="text" id="pengambilUp{{ barang.id }}" class="form-control" value="{{ barang.pengambil }}">
                                             </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
                                                     <label>Stok Barang Keluar</label>
                                                     <input data-toggle="touchspin" type="text" data-bts-max="{{ barang.stokSisa }}" id="stokUp{{ barang.id }}" value="{{ barang.stok }}">
                                                     <span class="help-block">
                                                         <small>Stok barang tersedia <b id="stokFix{{ barang.id }}">{{ barang.stokSisa }}</b></small>
                                                     </span>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="form-group col-md-6">
                                                     <label>Tanggal Barang Keluar</label>
                                                     <input type="date" id="tanggalUp{{ barang.id }}" class="form-control" value="{{ barang.waktu|date:'Y-m-d' }}">
                                                 </div>

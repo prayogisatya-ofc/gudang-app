@@ -47,14 +47,18 @@
             <div class="card-header pt-3 bg-white border-bottom">
                 <form action="{% url 'viewBarangMasuk' %}" method="get">
                     <div class="row">
-                        <div class="col-auto  mb-1 d-flex align-items-center">
-                            Dari <input type="date" name="start" class="form-control ml-2" value="{{ start|date:'Y-m-d' }}">
+                        <div class="col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-6 d-flex align-items-center">
+                                    Dari <input type="date" name="start" class="form-control ml-2" value="{{ start|date:'Y-m-d' }}">
+                                </div>
+                                <div class="form-group col-md-6 d-flex align-items-center">
+                                    Sampai <input type="date" name="end" class="form-control ml-2" value="{{ end|date:'Y-m-d' }}">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-auto mb-1 d-flex align-items-center">
-                            Sampai <input type="date" name="end" class="form-control ml-2" value="{{ end|date:'Y-m-d' }}">
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary"><i class="mr-1 uil-search"></i> Terapkan</button>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary btn-block"><i class="mr-1 uil-search"></i> Terapkan</button>
                         </div>
                     </div>
                 </form>
@@ -112,12 +116,12 @@
                                                     {% endfor %}
                                                 </select>
                                             </div>
-                                            <div class="form-group row">
-                                                <div class="col-md-6">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
                                                     <label>Stok Barang Masuk</label>
                                                     <input data-toggle="touchspin" type="text" id="stokUp{{ barang.id }}" value="{{ barang.stok }}">
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="form-group col-md-6">
                                                     <label>Tanggal Barang Masuk</label>
                                                     <input type="date" id="tanggalUp{{ barang.id }}" class="form-control" value="{{ barang.waktu|date:'Y-m-d' }}">
                                                 </div>
@@ -160,12 +164,12 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="form-group row">
-                    <div class="col-md-6">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
                         <label>Stok Barang Masuk</label>
                         <input data-toggle="touchspin" type="text" id="stokSA">
                     </div>
-                    <div class="col-md-6">
+                    <div class="form-group col-md-6">
                         <label>Tanggal Barang Masuk</label>
                         <input type="date" id="tanggalSA" class="form-control">
                     </div>
@@ -182,28 +186,28 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Tambah Barang Masuk (Barang Sudah Ada)</h5>
+                <h5 class="modal-title" id="myModalLabel">Tambah Barang Masuk</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col-md-6">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
                         <label>Nama Barang</label>
                         <input type="text" id="namaBarangB" class="form-control">
                     </div>
-                    <div class="col-md-6">
+                    <div class="form-group col-md-6">
                         <label>Stok Barang</label>
                         <input data-toggle="touchspin" type="text" id="stokB">
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-md-6">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
                         <label>Nama Pemasok</label>
                         <input type="text" id="pemasokB" class="form-control">
                     </div>
-                    <div class="col-md-6">
+                    <div class="form-group col-md-6">
                         <label>Tanggal Barang Masuk</label>
                         <input type="date" id="tanggalB" class="form-control">
                     </div>
