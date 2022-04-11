@@ -222,10 +222,10 @@
 
         if(stok && tanggal && pengambil){
             if (stok != 0) {
-                if (stok > stokSisa) {
+                if (stok > parseInt(stokSisa)) {
                     Swal.fire({
                         icon: 'warning',
-                        text: 'Stok keluar tidak boleh lebih dari "'+stokFix+'"!',
+                        text: 'Stok keluar tidak boleh lebih dari "'+stokSisa+'"!',
                         showConfirmButton: false,
                         timer: 2000
                     })
