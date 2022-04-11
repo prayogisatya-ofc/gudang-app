@@ -1,0 +1,341 @@
+{% extends "layout/main.html" %}
+{% load static %}
+
+{% block title %}
+    Barang Masuk
+{% endblock title %}
+
+{% block link %}
+<link href="{% static 'assets/libs/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'assets/libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.css' %}" rel="stylesheet" type="text/css" />
+{% endblock link %}
+
+{% block content %}
+<div class="row page-title">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="mb-0 mr-2 bg-primary p-2 text-white rounded"><i data-feather="download"></i></div>
+            <h4>Data Barang Masuk</h4>
+        </div>
+        <div class="d-flex align-items-center">
+            {% if auth.role != 'owner' %}
+            <div class="btn-group mr-2" data-toggle="tooltip" data-placement="top" title="Tambah Data">
+                <button type="button" class="btn btn-danger dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false"><i class="uil-plus"></i> <i class="icon"><span data-feather="chevron-down"></span></i></button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <button data-toggle="modal" data-target="#modalTambahSudahAda" class="dropdown-item notify-item">
+                        <i data-feather="check-circle" class="icon-dual icon-xs mr-2"></i>
+                        <span>Barang sudah ada</span>
+                    </button>
+                    <button data-toggle="modal" data-target="#modalTambahBaru" class="dropdown-item notify-item">
+                        <i data-feather="plus-circle" class="icon-dual icon-xs mr-2"></i>
+                        <span>Barang baru</span>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
+            <a href="{% url 'handlePrintBarangMasuk' start|date:'Y-m-d' end|date:'Y-m-d' %}" class="btn btn-primary mr-2" data-toggle="tooltip" data-placement="top" title="Print Data"><i class="uil-print"></i></a>
+            <a href="{% url 'handleExportBarangMasuk' start|date:'Y-m-d' end|date:'Y-m-d' %}" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="Export Data"><i class="uil-file-download-alt"></i></a>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header pt-3 bg-white border-bottom">
+                <form action="{% url 'viewBarangMasuk' %}" method="get">
+                    <div class="row">
+                        <div class="col-auto  mb-1 d-flex align-items-center">
+                            Dari <input type="date" name="start" class="form-control ml-2" value="{{ start|date:'Y-m-d' }}">
+                        </div>
+                        <div class="col-auto mb-1 d-flex align-items-center">
+                            Sampai <input type="date" name="end" class="form-control ml-2" value="{{ end|date:'Y-m-d' }}">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary"><i class="mr-1 uil-search"></i> Terapkan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="basic-datatable" class="table" width="100%">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Barang</th>
+                                <th>Stok Barang Masuk</th>
+                                <th>Pemasok Barang</th>
+                                <th>Penerima Barang</th>
+                                <th>Tanggal Penerimaan</th>
+                                {% if auth.role != 'owner' %}
+                                <th>Aksi</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for barang in barangs %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ barang.barang.nama }}</td>
+                                <td><div class="badge badge-soft-primary">{{ barang.stok }}</div></td>
+                                <td>{{ barang.barang.pemasok }}</td>
+                                <td>{{ barang.penerima }}</td>
+                                <td>{{ barang.waktu|date:'d M Y' }}</td>
+                                {% if auth.role != 'owner' %}
+                                <td class="d-flex">
+                                    <span data-toggle="modal" data-target="#modal-update-{{ barang.id }}">
+                                        <button class="btn btn-success btn-sm mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i class="uil-file-edit-alt"></i></button>
+                                    </span>
+                                    <button onclick="hapus('{{ barang.id }}')" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Hapus"><i class=" uil-trash-alt"></i></button>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% if auth.role != 'owner' %}
+                            <div id="modal-update-{{ barang.id }}" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="myModalLabel">Update Data</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label>Barang</label>
+                                                <select data-plugin="customselect" class="form-control" id="barangUp{{ barang.id }}">
+                                                    {% for bar in masuk %}
+                                                        <option {% if barang.barang.id == bar.id %}selected{% endif %} value="{{ bar.id }}">{{ bar.nama }} - {{ bar.pemasok }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label>Stok Barang Masuk</label>
+                                                    <input data-toggle="touchspin" type="text" id="stokUp{{ barang.id }}" value="{{ barang.stok }}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Tanggal Barang Masuk</label>
+                                                    <input type="date" id="tanggalUp{{ barang.id }}" class="form-control" value="{{ barang.waktu|date:'Y-m-d' }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
+                                            <button type="button" class="btn btn-primary" onclick="updateBarang('{{ barang.id }}')">Simpan Perubahan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div> <!-- end card body-->
+        </div> <!-- end card -->
+    </div><!-- end col-->
+</div>
+
+{% if auth.role != 'owner' %}
+<div id="modalTambahSudahAda" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Tambah Barang Masuk (Barang Sudah Ada)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Barang</label>
+                    <select data-plugin="customselect" class="form-control" id="barangSA">
+                        {% for bar in masuk %}
+                        <option value="{{ bar.id }}">{{ bar.nama }} - {{ bar.pemasok }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label>Stok Barang Masuk</label>
+                        <input data-toggle="touchspin" type="text" id="stokSA">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Tanggal Barang Masuk</label>
+                        <input type="date" id="tanggalSA" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="btnSimpan">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalTambahBaru" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Tambah Barang Masuk (Barang Sudah Ada)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label>Nama Barang</label>
+                        <input type="text" id="namaBarangB" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Stok Barang</label>
+                        <input data-toggle="touchspin" type="text" id="stokB">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label>Nama Pemasok</label>
+                        <input type="text" id="pemasokB" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Tanggal Barang Masuk</label>
+                        <input type="date" id="tanggalB" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Fungsi Barang</label>
+                    <textarea id="fungsiB" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="btnSimpanB">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}
+
+{% block java %}
+<script src="{% static 'assets/libs/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/libs/datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/libs/select2/select2.min.js' %}"></script>
+<script src="{% static 'assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+<script src="{% static 'assets/js/pages/barangMasuk.js' %}"></script>
+{% if auth.role != 'owner' %}
+<script>
+    function hapus(id) {
+        Swal.fire({
+            icon: 'warning',
+            text: 'Apakah anda yakin ingin menghapus data ini?',
+            showCancelButton: true,
+            cancelButtonText: "Tidak",
+            confirmButtonText: "Yakin",
+            confirmButtonColor: "#5369F8",
+        }).then((r)=>{
+            if(r.isConfirmed){
+                $.ajax({
+                    headers:{"X-CSRFToken":token},
+                    type:"POST",
+                    url:"/barang-masuk/hapus-barang/",
+                    data:{
+                        "id":id
+                    },
+                    dataType:"json"
+                }).done(a=>{
+                    if (a.status){
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Berhasil hapus barang masuk',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(a=>{
+                            window.location.href="/barang-masuk/"
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            text: a.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                    }
+                })
+            }
+        })
+    }
+    function updateBarang(id) {
+        const barang = $("#barangUp"+id+" option:selected").attr("value"),
+        stok = $('#stokUp'+id).val(),
+        tanggal = $('#tanggalUp'+id).val()
+
+        if(barang && stok && tanggal){
+            if (stok != 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Apakah anda yakin data yang dimasukkan sudah benar?',
+                    showCancelButton: true,
+                    cancelButtonText: "Belum",
+                    confirmButtonText: "Yakin",
+                    confirmButtonColor: "#5369F8",
+                }).then((r)=>{
+                    if(r.isConfirmed){
+                        $.ajax({
+                            headers:{"X-CSRFToken":token},
+                            type:"POST",
+                            url:"/barang-masuk/update-barang/",
+                            data:{
+                                "id":id,
+                                "barang":barang,
+                                "stok":stok,
+                                "tanggal":tanggal
+                            },
+                            dataType:"json"
+                        }).done(a=>{
+                            if (a.status){
+                                Swal.fire({
+                                    icon: 'success',
+                                    text: 'Berhasil update data',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                }).then(a=>{
+                                    window.location.href="/barang-masuk/"
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: a.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                })
+                            }
+                        })
+                    }
+                })
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    text: 'Stok tidak boleh "0"!',
+                    showConfirmButton: false,
+                    timer: 2000
+                })
+            }
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                text: 'Ada form yang belum diisi!',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
+    }
+</script>
+{% endif %}
+{% endblock java %}

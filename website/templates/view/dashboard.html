@@ -1,0 +1,81 @@
+{% extends "layout/main.html" %}
+{% load static %}
+
+{% block title %}
+    Dashboard
+{% endblock title %}
+
+{% block content %}
+<div class="row page-title">
+    <div class="col-md-12 text-center">
+        <img src="{% static 'assets/images/logo.png' %}" alt="" width="100" class="mb-3" />
+        <h3>Selamat Datang di Gudang App</h3>
+        <p>Aplikasi pengelolaan barang di gudang berbasis aplikasi website</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-xl-3">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="media p-3">
+                    <div class="media-body">
+                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Total Barang</span>
+                        <h2 class="mb-0">{{ barang }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <span class="icon-lg icon-dual-primary" data-feather="package"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="media p-3">
+                    <div class="media-body">
+                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Total Barang Masuk</span>
+                        <h2 class="mb-0">{{ barangM }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <span class="icon-lg icon-dual-success" data-feather="download"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="media p-3">
+                    <div class="media-body">
+                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Total Barang Keluar</span>
+                        <h2 class="mb-0">{{ barangK }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <span class="icon-lg icon-dual-danger" data-feather="upload"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="media p-3">
+                    <div class="media-body">
+                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Total Petugas</span>
+                        <h2 class="mb-0">{{ user }}</h2>
+                    </div>
+                    <div class="align-self-center">
+                        <span class="icon-lg icon-dual-info" data-feather="user"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

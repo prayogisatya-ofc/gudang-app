@@ -1,0 +1,47 @@
+{% extends "layout/main.html" %}
+{% load static %}
+
+{% block title %}
+    Akun Saya
+{% endblock title %}
+
+{% block content %}
+<div class="row page-title">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="mb-0 mr-2 bg-primary p-2 text-white rounded"><i data-feather="user"></i></div>
+            <h4>Akun Saya</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label>Nama Petugas</label>
+                        <input type="text" id="nama" class="form-control" value="{{ petugases.nama }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Username</label>
+                        <input type="text" class="form-control" id="username" value="{{ petugases.username }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" class="form-control" autocomplete="none">
+                    <span class="help-block">
+                        <small>Masukkan password sebelumnya jika tidak ingin mengganti password!</small>
+                    </span>
+                </div>
+                <button class="btn btn-primary" id="btnSimpan">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block java %}
+<script src="{% static 'assets/js/pages/akun_saya.js' %}"></script>
+{% endblock java %}

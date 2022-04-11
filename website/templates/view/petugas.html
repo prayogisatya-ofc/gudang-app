@@ -1,0 +1,250 @@
+{% extends "layout/main.html" %}
+{% load static %}
+
+{% block title %}
+    Petugas
+{% endblock title %}
+
+{% block link %}
+<link href="{% static 'assets/libs/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock link %}
+
+{% block content %}
+<div class="row page-title">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="mb-0 mr-2 bg-primary p-2 text-white rounded"><i data-feather="user"></i></div>
+            <h4>Data Petugas</h4>
+        </div>
+        <span data-toggle="tooltip" data-placement="top" title="Tambah Petugas">
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-tambah"><i class="uil-plus"></i></button>
+        </span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="basic-datatable" class="table" width="100%">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Petugas</th>
+                                <th>Username Petugas</th>
+                                <th>Role Petugas</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for petugas in petugases %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ petugas.nama }}</td>
+                                <td>{{ petugas.username }}</td>
+                                <td><span class="badge badge-soft-primary text-capitalize">{{ petugas.role }}</span></td>
+                                <td class="d-flex">
+                                    <span data-toggle="modal" data-target="#modal-update-{{ petugas.id }}">
+                                        <button class="btn btn-success btn-sm mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i class="uil-file-edit-alt"></i></button>
+                                    </span>
+                                    <button onclick="hapus('{{ petugas.id }}')" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Hapus"><i class=" uil-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <div id="modal-update-{{ petugas.id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="myModalLabel">Update Data Petugas</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label>Nama Petugas</label>
+                                                    <input type="text" id="nama{{ petugas.id }}" class="form-control" value="{{ petugas.nama }}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>Username</label>
+                                                    <input type="text" class="form-control" id="username{{ petugas.id }}" value="{{ petugas.username }}">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Password</label>
+                                                <input autocomplete="none" type="password" id="password{{ petugas.id }}" class="form-control">
+                                                <span class="help-block">
+                                                    <small>Masukkan password sebelumnya jika tidak ingin mengganti password!</small>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Role Petugas</label>
+                                                <select class="form-control" id="role{{ petugas.id }}"> 
+                                                    {% for level in role %}
+                                                      <option {% if level == petugas.role %}selected{% endif %} value="{{ level }}" class="text-capitalize">{{ level }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
+                                            <button type="button" class="btn btn-primary" onclick="updatePetugas('{{ petugas.id }}')">Simpan Perubahan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-tambah" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Tambah Data Petugas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label>Nama Petugas</label>
+                        <input type="text" id="nama" class="form-control">
+                    </div>
+                    <div class="col-md-6">
+                        <label>Username</label>
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Role Petugas</label>
+                    <select class="form-control" id="role"> 
+                        <option value="admin">Admin</option>
+                        <option value="owner">Owner</option>
+                        <option value="officer">Officer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="btnSimpan">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block java %}
+<script src="{% static 'assets/libs/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/libs/datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/js/pages/petugas.js' %}"></script>
+<script>
+    function hapus(id) {
+        Swal.fire({
+            icon: 'warning',
+            text: 'Apakah anda yakin ingin menghapus data ini?',
+            showCancelButton: true,
+            cancelButtonText: "Tidak",
+            confirmButtonText: "Yakin",
+            confirmButtonColor: "#5369F8",
+        }).then((r)=>{
+            if(r.isConfirmed){
+                $.ajax({
+                    headers:{"X-CSRFToken":token},
+                    type:"POST",
+                    url:"/petugas/hapus-petugas/",
+                    data:{
+                        "id":id
+                    },
+                    dataType:"json"
+                }).done(a=>{
+                    if (a.status){
+                        Swal.fire({
+                            icon: 'success',
+                            text: 'Berhasil hapus petugas',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(a=>{
+                            window.location.href="/petugas/"
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            text: a.message,
+                            showConfirmButton: false,
+                            timer: 2000
+                        })
+                    }
+                })
+            }
+        })
+    }
+    function updatePetugas(id) {
+        const nama = $('#nama'+id).val(),
+        username = $('#username'+id).val(),
+        password = $('#password'+id).val(),
+        role = $('#role'+id+" option:selected").attr("value")
+
+        if(nama && username && password && role ){
+            Swal.fire({
+                    icon: 'warning',
+                    text: 'Apakah anda yakin data yang dimasukkan sudah benar?',
+                    showCancelButton: true,
+                    cancelButtonText: "Belum",
+                    confirmButtonText: "Yakin",
+                    confirmButtonColor: "#5369F8",
+                }).then((r)=>{
+                    if(r.isConfirmed){
+                        $.ajax({
+                            headers:{"X-CSRFToken":token},
+                            type:"POST",
+                            url:"/petugas/update-petugas/",
+                            data:{
+                                "id":id,
+                                "nama":nama,
+                                "username":username,
+                                "password":password,
+                                "role":role
+                            },
+                            dataType:"json"
+                        }).done(a=>{
+                            if (a.status){
+                                Swal.fire({
+                                    icon: 'success',
+                                    text: 'Berhasil ubah data petugas',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                }).then(a=>{
+                                    window.location.href="/petugas/"
+                                })
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    text: a.message,
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                })
+                            }
+                        })
+                    }
+                })
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                text: 'Ada form yang belum diisi!',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        }
+    }
+</script>
+{% endblock java %}

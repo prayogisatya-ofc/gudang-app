@@ -1,0 +1,37 @@
+{% extends "layout/print.html" %}
+
+{% block title %}
+  Print Data Barang
+{% endblock title %}
+
+{% block content %}
+<center>
+    <h3 class="mb-5 mt-5">Data Barang</h3>
+</center>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nama Barang</th>
+            <th>Stok Barang</th>
+            <th>Pemasok Barang</th>
+            <th>Fungsi Barang</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for barang in barangs %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ barang.nama }}</td>
+            <td>{{ barang.get_stok }}</></td>
+            <td>{{ barang.pemasok }}</td>
+            <td>{{ barang.fungsi }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}
+
+{% block url %}
+  /barang/
+{% endblock url %}
