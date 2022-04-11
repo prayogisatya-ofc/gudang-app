@@ -75,10 +75,21 @@ WSGI_APPLICATION = 'gudang.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd5ejv279h6ckj7',
+        'USER': 'vhseibzearfsul',
+        'PASSWORD': 'bcbe51cd4184e5c1bda1b53decdd0214d93f72812a770601f0474a715403861d',
+        'HOST': 'ec2-34-207-12-160.compute-1.amazonaws.com',
+        'PORT':  5432,
     }
 }
 
