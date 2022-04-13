@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-    Barang
+    Data Barang
 {% endblock title %}
 
 {% block link %}
@@ -42,7 +42,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Barang</th>
-                                <th>Stok Barang</th>
+                                <th>Jumlah Barang</th>
                                 <th>Pemasok Barang</th>
                                 {% if auth.role != 'owner' %}
                                 <th>Aksi</th>
@@ -66,9 +66,6 @@
                                 <td>{{ barang.pemasok }}</td>
                                 {% if auth.role != 'owner' %}
                                 <td class="d-flex">
-                                    <span data-toggle="modal" data-target="#modal-keluar-{{ barang.id }}">
-                                        <button class="btn btn-primary btn-sm mr-2" data-toggle="tooltip" data-placement="top" title="Barang Keluar"><i class="uil-export"></i></button>
-                                    </span>
                                     <span data-toggle="modal" data-target="#modal-update-{{ barang.id }}">
                                         <button class="btn btn-success btn-sm mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i class="uil-file-edit-alt"></i></button>
                                     </span>
@@ -80,45 +77,6 @@
                                 {% endif %}
                             </tr>
                             {% if auth.role != 'owner' %}
-                            <div id="modal-keluar-{{ barang.id }}" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="myModalLabel">Barang Keluar</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <label>Barang</label>
-                                                <input type="text" class="form-control" disabled value="{{ barang.nama }} - {{ barang.pemasok }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>Pengambil Barang</label>
-                                                <input type="text" id="pengambilK{{ barang.id }}" class="form-control">
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
-                                                    <label>Stok Barang Keluar</label>
-                                                    <input data-toggle="touchspin" type="text" data-bts-max="{{ barang.get_stok }}" id="stokK{{ barang.id }}">
-                                                    <span class="help-block">
-                                                        <small>Stok barang tersedia <b id="stokFix{{ barang.id }}">{{ barang.get_stok }}</b></small>
-                                                    </span>
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label>Tanggal Barang Keluar</label>
-                                                    <input type="date" id="tanggalK{{ barang.id }}" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
-                                            <button type="button" class="btn btn-primary" onclick="barangKeluar('{{ barang.id }}')">Simpan Perubahan</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div id="modal-update-{{ barang.id }}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -135,7 +93,7 @@
                                                     <input type="text" id="namaBarang{{ barang.id }}" class="form-control" required value="{{ barang.nama }}">
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label>Stok Barang</label>
+                                                    <label>Jumlah Barang</label>
                                                     <input type="number" class="form-control" readonly value="{{ barang.get_stok }}">
                                                 </div>
                                             </div>
@@ -213,81 +171,6 @@
                 })
             }
         })
-    }
-    function barangKeluar(id) {
-        const stok = $('#stokK'+id).val(),
-        pengambil = $('#pengambilK'+id).val(),
-        tanggal = $('#tanggalK'+id).val(),
-        stokSisa = $('#stokFix'+id).text()
-
-        if(stok && tanggal && pengambil){
-            if (stok != 0) {
-                if (stok > parseInt(stokSisa)) {
-                    Swal.fire({
-                        icon: 'warning',
-                        text: 'Stok keluar tidak boleh lebih dari "'+stokSisa+'"!',
-                        showConfirmButton: false,
-                        timer: 2000
-                    })
-                } else {
-                    Swal.fire({
-                        icon: 'warning',
-                        text: 'Apakah anda yakin data yang dimasukkan sudah benar?',
-                        showCancelButton: true,
-                        cancelButtonText: "Belum",
-                        confirmButtonText: "Yakin",
-                        confirmButtonColor: "#5369F8",
-                    }).then((r)=>{
-                        if(r.isConfirmed){
-                            $.ajax({
-                                headers:{"X-CSRFToken":token},
-                                type:"POST",
-                                url:"/barang-keluar/",
-                                data:{
-                                    "id":id,
-                                    "stok":stok,
-                                    "tanggal":tanggal,
-                                    "pengambil":pengambil
-                                },
-                                dataType:"json"
-                            }).done(a=>{
-                                if (a.status){
-                                    Swal.fire({
-                                        icon: 'success',
-                                        text: 'Berhasil tambah barang keluar',
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    }).then(a=>{
-                                        window.location.href="/barang-keluar/"
-                                    })
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        text: a.message,
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    })
-                                }
-                            })
-                        }
-                    })
-                }
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    text: 'Stok tidak boleh "0"!',
-                    showConfirmButton: false,
-                    timer: 2000
-                })
-            }
-        } else {
-            Swal.fire({
-                icon: 'warning',
-                text: 'Ada form yang belum diisi!',
-                showConfirmButton: false,
-                timer: 2000
-            })
-        }
     }
     function updateBarang(id) {
         const nama = $('#namaBarang'+id).val(),

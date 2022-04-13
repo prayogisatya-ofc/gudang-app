@@ -43,37 +43,6 @@ def ajax(request):
 
     if request.session.get('user') and request.session.get('role') != 'owner':
         if request.POST:
-            idb = request.POST.get('id')
-            stok = int(request.POST.get('stok'))
-            tanggal = request.POST.get('tanggal')
-            pengambil = request.POST.get('pengambil')
-            if stok and tanggal and pengambil:
-                query = db.Barang.objects.filter(id=idb)
-                if stok != 0:
-                    if stok > query[0].get_stok():
-                        result['message'] = "Stok keluar tidak boleh lebih dari '"+query[0].get_stok()+"'!"
-                    else:
-                        db.BarangKeluar(
-                            barang=query[0],
-                            stok=stok,
-                            pengambil=pengambil,
-                            waktu=tanggal
-                        ).save()
-                        result['status'] = True
-                else:
-                    result['message'] = "Stok tidak boleh '0'!"
-            else:
-                result['message'] = "Ada form yang masih kosong!"
-
-    return JsonResponse(result)
-
-def update(request):
-    result = {
-        "status": False
-    }
-
-    if request.session.get('user') and request.session.get('role') != 'owner':
-        if request.POST:
             stok = int(request.POST.get('stok'))
             tanggal = request.POST.get('tanggal')
             pengambil = request.POST.get('pengambil')

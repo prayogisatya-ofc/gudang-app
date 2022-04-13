@@ -53,7 +53,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Barang</th>
-                                <th>Stok Barang Keluar</th>
+                                <th>Jumlah Barang</th>
                                 <th>Pemasok Barang</th>
                                 <th>Pengambil Barang</th>
                                 <th>Tanggal Pengambilan</th>
@@ -104,7 +104,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-md-6">
-                                                    <label>Stok Barang Keluar</label>
+                                                    <label>Jumlah Barang</label>
                                                     <input data-toggle="touchspin" type="text" data-bts-max="{{ barang.stokSisa }}" id="stokUp{{ barang.id }}" value="{{ barang.stok }}">
                                                     <span class="help-block">
                                                         <small>Stok barang tersedia <b id="stokFix{{ barang.id }}">{{ barang.stokSisa }}</b></small>
@@ -211,7 +211,7 @@
                             $.ajax({
                                 headers:{"X-CSRFToken":token},
                                 type:"POST",
-                                url:"/barang-keluar/update-barang/",
+                                url:"/barang-keluar/",
                                 data:{
                                     "id":id,
                                     "stok":stok,

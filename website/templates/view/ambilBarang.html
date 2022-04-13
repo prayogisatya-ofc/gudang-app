@@ -1,0 +1,69 @@
+{% extends "layout/main.html" %}
+{% load static %}
+
+{% block title %}
+    Ambil Barang
+{% endblock title %}
+
+{% block link %}
+<link href="{% static 'assets/libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css" />
+<link href="{% static 'assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.css' %}" rel="stylesheet" type="text/css" />
+{% endblock link %}
+
+{% block content %}
+<div class="row page-title">
+    <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="mb-0 mr-2 bg-primary p-2 text-white rounded"><i data-feather="archive"></i></div>
+            <h4>Ambil Barang</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Barang</label>
+                    <select data-plugin="customselect" class="form-control" id="barangK" data-placeholder="Pilih barang">
+                        <option></option>
+                        {% for bar in barang %}
+                            <option value="{{ bar.id }}" stok="{{ bar.get_stok }}">{{ bar.nama }} - {{ bar.pemasok }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pengambil Barang</label>
+                    <input type="text" id="pengambilK" class="form-control">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Jumlah Barang</label>
+                        <input data-toggle="touchspin" type="text" id="stokK">
+                        <span class="help-block">
+                            <small>Stok barang tersedia <b id="stokFix"></b></small>
+                        </span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Tanggal Barang Keluar</label>
+                        <input type="date" id="tanggalK" class="form-control">
+                    </div>
+                </div>
+                <button class="btn float-right btn-primary" id="btnSimpan">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block java %}
+<script src="{% static 'assets/libs/select2/select2.min.js' %}"></script>
+<script src="{% static 'assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+<script src="{% static 'assets/js/pages/ambilBarang.js' %}"></script>
+<script>
+    $('#barangK').on('change', function(){
+        $('#stokK').val(0)
+        $('#stokFix').text($('#barangK option:selected').attr('stok'))
+    })
+</script>
+{% endblock java %}

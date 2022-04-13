@@ -43,51 +43,39 @@ def ajax(request):
             barang = request.POST.get('barang')
             stok = int(request.POST.get('stok'))
             tanggal = request.POST.get('tanggal')
+            parse = barang.split('|')
+
             if barang and stok and tanggal:
                 if stok != 0:
-                    query = db.Barang.objects.filter(id=barang)
-                    db.BarangMasuk(
-                        barang=query[0],
-                        stok=stok,
-                        penerima=db.User.objects.get(id=request.session.get('user')),
-                        waktu=tanggal
-                    ).save()
-                    result['status'] = True
-                else:
-                    result['message'] = "Stok tidak boleh '0'!"
-            else:
-                result['message'] = "Ada form yang masih kosong!"
-
-    return JsonResponse(result)
-
-def tambah(request):
-    result = {
-        "status": False
-    }
-
-    if request.session.get('user') and request.session.get('role') != 'owner':
-        if request.POST:
-            barang = request.POST.get('barang')
-            stok = int(request.POST.get('stok'))
-            pemasok = request.POST.get('pemasok')
-            fungsi = request.POST.get('fungsi')
-            tanggal = request.POST.get('tanggal')
-            if barang and stok and pemasok and tanggal:
-                if stok != 0:
-                    query = db.Barang(
-                        nama=barang,
-                        pemasok=pemasok,
-                        fungsi=fungsi
-                    )
-                    query.save()
-                    print(query)
-                    db.BarangMasuk(
-                        barang=query,
-                        stok=stok,
-                        penerima=db.User.objects.get(id=request.session.get('user')),
-                        waktu=tanggal
-                    ).save()
-                    result['status'] = True
+                    if barang.isnumeric():
+                        queryb = db.Barang.objects.filter(id=barang)
+                        if queryb.exists():
+                            querym = db.BarangMasuk(
+                                barang=queryb[0],
+                                stok=stok,
+                                penerima=db.User.objects.get(id=request.session.get('user')),
+                                waktu=tanggal
+                            ).save()
+                            result['status'] = True
+                        else:
+                            result['message'] = "Barang tidak ada!"
+                    else:
+                        if len(parse) == 3:
+                            query = db.Barang(
+                                nama=parse[0],
+                                pemasok=parse[1],
+                                fungsi=parse[2]
+                            )
+                            query.save()
+                            db.BarangMasuk(
+                                barang=query,
+                                stok=stok,
+                                penerima=db.User.objects.get(id=request.session.get('user')),
+                                waktu=tanggal
+                            ).save()
+                            result['status'] = True
+                        else:
+                            result['message'] = "Pastikan barang berformat (nama barang | pemasok | fungsi)!"
                 else:
                     result['message'] = "Stok tidak boleh '0'!"
             else:

@@ -21,19 +21,8 @@
         <div class="d-flex align-items-center">
             {% if auth.role != 'owner' %}
             <div class="btn-group mr-2" data-toggle="tooltip" data-placement="top" title="Tambah Data">
-                <button type="button" class="btn btn-danger dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false"><i class="uil-plus"></i> <i class="icon"><span data-feather="chevron-down"></span></i></button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <button data-toggle="modal" data-target="#modalTambahSudahAda" class="dropdown-item notify-item">
-                        <i data-feather="check-circle" class="icon-dual icon-xs mr-2"></i>
-                        <span>Barang sudah ada</span>
-                    </button>
-                    <button data-toggle="modal" data-target="#modalTambahBaru" class="dropdown-item notify-item">
-                        <i data-feather="plus-circle" class="icon-dual icon-xs mr-2"></i>
-                        <span>Barang baru</span>
-                    </button>
-                </div>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalTambahSudahAda"><i class="uil-plus"></i> <i class="icon"></i>
+                </button>
             </div>
             {% endif %}
             <a href="{% url 'handlePrintBarangMasuk' start|date:'Y-m-d' end|date:'Y-m-d' %}" class="btn btn-primary mr-2" data-toggle="tooltip" data-placement="top" title="Print Data"><i class="uil-print"></i></a>
@@ -70,7 +59,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Barang</th>
-                                <th>Stok Barang Masuk</th>
+                                <th>Jumlah Barang</th>
                                 <th>Pemasok Barang</th>
                                 <th>Penerima Barang</th>
                                 <th>Tanggal Penerimaan</th>
@@ -118,7 +107,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="form-group col-md-6">
-                                                    <label>Stok Barang Masuk</label>
+                                                    <label>Jumlah Barang</label>
                                                     <input data-toggle="touchspin" type="text" id="stokUp{{ barang.id }}" value="{{ barang.stok }}">
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -163,10 +152,13 @@
                         <option value="{{ bar.id }}">{{ bar.nama }} - {{ bar.pemasok }}</option>
                         {% endfor %}
                     </select>
+                    <span class="help-block">
+                        <small>Jika barang baru, tulis dengan format <b>nama barang | pemasok | fungsi</b></small>
+                    </span>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label>Stok Barang Masuk</label>
+                        <label>Jumlah Barang</label>
                         <input data-toggle="touchspin" type="text" id="stokSA">
                     </div>
                     <div class="form-group col-md-6">
@@ -178,48 +170,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" id="btnSimpan">Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="modalTambahBaru" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Tambah Barang Masuk</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Nama Barang</label>
-                        <input type="text" id="namaBarangB" class="form-control">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Stok Barang</label>
-                        <input data-toggle="touchspin" type="text" id="stokB">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label>Nama Pemasok</label>
-                        <input type="text" id="pemasokB" class="form-control">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Tanggal Barang Masuk</label>
-                        <input type="date" id="tanggalB" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Fungsi Barang</label>
-                    <textarea id="fungsiB" class="form-control"></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary" id="btnSimpanB">Simpan</button>
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-from .program import login, dashboard, barang, barangMasuk, barangKeluar, petugas, akunSaya
+from .program import login, dashboard, barang, barangMasuk, barangKeluar, petugas, akunSaya, ambilBarang
 from django.urls import path
 
 urlpatterns = [
@@ -12,14 +12,12 @@ urlpatterns = [
     path('barang/export/', barang.exportData, name="exportData"),
 
     path('barang-masuk/', barangMasuk.controller, name="viewBarangMasuk"),
-    path('barang-masuk/tambah-baru/', barangMasuk.tambah, name="handleTambahBarangMasukBaru"),
     path('barang-masuk/update-barang/', barangMasuk.update, name="handleUbahBarangMasukBaru"),
     path('barang-masuk/hapus-barang/', barangMasuk.hapus, name="handleHapusBarangMasukBaru"),
     path('barang-masuk/print/<str:start>/<str:end>/', barangMasuk.printData, name="handlePrintBarangMasuk"),
     path('barang-masuk/export/<str:start>/<str:end>/', barangMasuk.exportData, name="handleExportBarangMasuk"),
 
     path('barang-keluar/', barangKeluar.controller, name="viewBarangKeluar"),
-    path('barang-keluar/update-barang/', barangKeluar.update, name="handleUbahBarangKeluar"),
     path('barang-keluar/hapus-barang/', barangKeluar.hapus, name="handleHapusBarangKeluar"),
     path('barang-keluar/print/<str:start>/<str:end>/', barangKeluar.printData, name="handlePrintBarangKeluar"),
     path('barang-keluar/export/<str:start>/<str:end>/', barangKeluar.exportData, name="handleExportBarangKeluar"),
@@ -29,4 +27,6 @@ urlpatterns = [
     path('petugas/hapus-petugas/', petugas.hapus, name="handleHapusPetugas"),
 
     path('akun-saya/', akunSaya.controller, name="viewAkunSaya"),
+
+    path('ambil-barang/', ambilBarang.controller, name="viewAmbilBarang"),
 ]

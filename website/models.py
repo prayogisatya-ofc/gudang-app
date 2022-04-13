@@ -39,6 +39,8 @@ class Barang(models.Model):
 
         totalStok = subMasuk - subKeluar
         return totalStok
+    
+    stok = property(get_stok)
 
     def __str__(self):
         return self.nama
