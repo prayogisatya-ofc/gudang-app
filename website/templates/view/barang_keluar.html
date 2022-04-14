@@ -30,17 +30,17 @@
             <div class="card-header pt-3 bg-white border-bottom">
                 <form action="{% url 'viewBarangKeluar' %}" method="get">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-xl-4">
                             <div class="form-row">
-                                <div class="form-group col-md-6 d-flex align-items-center">
+                                <div class="form-group col-lg-6 d-flex align-items-center">
                                     Dari <input type="date" name="start" class="form-control ml-2" value="{{ start|date:'Y-m-d' }}">
                                 </div>
-                                <div class="form-group col-md-6 d-flex align-items-center">
+                                <div class="form-group col-lg-6 d-flex align-items-center">
                                     Sampai <input type="date" name="end" class="form-control ml-2" value="{{ end|date:'Y-m-d' }}">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-xl-1">
                             <button type="submit" class="btn btn-primary btn-block"><i class="mr-1 uil-search"></i> Terapkan</button>
                         </div>
                     </div>
