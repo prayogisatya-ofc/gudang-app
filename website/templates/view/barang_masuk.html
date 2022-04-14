@@ -147,7 +147,8 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Barang</label>
-                    <select data-plugin="customselect" class="form-control" id="barangSA">
+                    <select data-plugin="customselect" class="form-control" id="barangSA" data-placeholder="Pilih barang atau buat barang baru">
+                        <option></option>
                         {% for bar in masuk %}
                         <option value="{{ bar.id }}">{{ bar.nama }} - {{ bar.pemasok }}</option>
                         {% endfor %}
@@ -165,7 +166,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer d-none" id="box-btn-simpan">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" id="btnSimpan">Simpan</button>
             </div>

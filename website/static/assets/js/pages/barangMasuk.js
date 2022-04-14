@@ -17,6 +17,8 @@ $(document).ready(function(){
     $('[data-toggle="touchspin"]').TouchSpin()
 
     $('#barangSA').on('change', function(){
+        $('#box-btn-simpan').removeClass('d-none')
+
         if ($('#barangSA option:selected').attr('data-select2-tag')) {
             $('#box-form').html(`
             <div class="form-group">
@@ -29,8 +31,9 @@ $(document).ready(function(){
         }
     })
 
+
     $('#btnSimpan').on('click',function(){
-        const barang = $("#barangSA").val().replace("'", ""),
+        const barang = $("#barangSA").val(),
         stok = $('#stokSA').val(),
         tanggal = $('#tanggalSA').val()
 
