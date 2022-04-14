@@ -4,7 +4,12 @@ from django.http import JsonResponse, HttpResponse
 import datetime
 
 def controller(request):
-    return redirect('/login/') if not request.session.get('user') else views(request) if request.method == 'GET' else ajax(request)
+    if request.session.get('user') and request.session.get('role') != 'owner':
+        if request.method == "POST":
+            return ajax(request)
+        return views(request)
+    else:
+        return redirect('/login/')
 
 def views(request):
     user = db.User.objects.get(id=request.session.get('user'))

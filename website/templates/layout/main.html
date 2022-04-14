@@ -94,12 +94,14 @@
                                 </a>
                             </li>
                             <li class="menu-title">Barang</li>
+                            {% if auth.role != 'owner' %}
                             <li>
                                 <a href="{% url 'viewAmbilBarang' %}">
                                     <i data-feather="archive"></i>
                                     <span> Ambil Barang </span>
                                 </a>
                             </li>
+                            {% endif %}
                             <li>
                                 <a href="{% url 'viewBarang' %}">
                                     <i data-feather="package"></i>
