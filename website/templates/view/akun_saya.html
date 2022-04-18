@@ -21,16 +21,16 @@
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label>Nama Petugas</label>
-                        <input type="text" id="nama" class="form-control" value="{{ petugases.nama }}">
+                        <input type="text" id="nama" class="form-control" value="{{ petugases.nama }}" maxlength="100">
                     </div>
                     <div class="col-md-6">
                         <label>Username</label>
-                        <input type="text" class="form-control" id="username" value="{{ petugases.username }}">
+                        <input type="text" class="form-control" id="username" value="{{ petugases.username }}" maxlength="100">
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="password" class="form-control" autocomplete="none">
+                    <input type="password" id="password" class="form-control" autocomplete="none" maxlength="100">
                     <span class="help-block">
                         <small>Masukkan password sebelumnya jika tidak ingin mengganti password!</small>
                     </span>
